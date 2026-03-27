@@ -6,6 +6,7 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Layout/SScrollBox.h"
 #include "Widgets/Input/SEditableTextBox.h"
+#include "Widgets/Text/SMultiLineEditableText.h"
 #include "Widgets/Input/SComboBox.h"
 #include "Components/Widget.h"
 #include "GenAITypes.h"
@@ -46,6 +47,7 @@ public:
 private:
     // ─── Layout builders ──────────────────────────────────────────────────────
     TSharedRef<SWidget> BuildHeader();
+    TSharedRef<SWidget> BuildSidebar();
     TSharedRef<SWidget> BuildScrollArea();
     TSharedRef<SWidget> BuildAttachmentBar();
     TSharedRef<SWidget> BuildInputRow();
@@ -56,12 +58,19 @@ private:
     void UpdateStreamingBubble(const FString& FullText, bool bDone);
     TSharedRef<SWidget> MakeBubble(bool bIsUser, const FString& Text);
     void ScrollToBottom();
+    
+    // ─── Sessions ─────────────────────────────────────────────────────────────
+    void SwitchToSession(const FString& SessionId);
+    void CreateNewSession();
+    void RefreshSessionsList();
+    TSharedRef<SWidget> MakeSessionRow(TSharedPtr<FGenAIChatSession> Session);
 
     // ─── Actions ──────────────────────────────────────────────────────────────
     void DoSend();
     FReply OnSendClicked();
     void OnInputCommitted(const FText& Text, ETextCommit::Type Type);
     void OnModelSelected(TSharedPtr<FString> Item, ESelectInfo::Type);
+    void OnLanguageSelected(TSharedPtr<FString> Item, ESelectInfo::Type);
     TSharedRef<SWidget> MakeModelRow(TSharedPtr<FString> Item);
     FText GetCurrentModelLabel() const;
 
@@ -80,6 +89,7 @@ private:
     // ─── State ────────────────────────────────────────────────────────────────
     TArray<FGenChatMessage> History;
     int32 SelectedModel = 0;
+    EGenAILanguage SelectedLanguage = EGenAILanguage::Ukrainian;
     bool bStreaming = false;
     FString StreamAccum;
 
@@ -88,11 +98,17 @@ private:
     TSharedPtr<SVerticalBox>            MessagesVBox;
     TSharedPtr<SEditableTextBox>        InputBox;
     TSharedPtr<SComboBox<TSharedPtr<FString>>> ModelCombo;
+    TSharedPtr<SComboBox<TSharedPtr<FString>>> LanguageCombo;
     TArray<TSharedPtr<FString>>         ComboItems;
+    TArray<TSharedPtr<FString>>         LanguageItems;
     TSharedPtr<SEditableTextBox>        CustomModelBox;
-    TSharedPtr<STextBlock>              StreamingLabel;   // live text block
+    TSharedPtr<SMultiLineEditableText>  StreamingLabel_Editable;   // copyable live text
     TSharedPtr<SWidget>                 AttachBar;
     TSharedPtr<STextBlock>              AttachLabel;
+    
+    // ─── Session UI ───────────────────────────────────────────────────────────
+    TSharedPtr<SVerticalBox>            SessionsVBox;
+    TArray<TSharedPtr<FGenAIChatSession>> SessionItems;
 
     // ─── Brushes (must outlive widget) ────────────────────────────────────────
     FSlateBrush BgBrush;
@@ -125,7 +141,7 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = "GenAI|Chat",
               meta = (WorldContext = "WorldContextObject",
-                      DisplayName = "Open GenAI Chat"))
+                       DisplayName = "Open GenAI Chat"))
     static void OpenGenAIChat(UObject* WorldContextObject);
 
     /** Close the currently open chat panel. */

@@ -17,7 +17,7 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 // ********** Begin Class UGenAISettings ***********************************************************
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execSetMistralKey); \
 	DECLARE_FUNCTION(execSetDeepSeekKey); \
 	DECLARE_FUNCTION(execSetGoogleKey); \
@@ -27,7 +27,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 UU_GENAI_API UClass* Z_Construct_UClass_UGenAISettings_NoRegister();
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_INCLASS_NO_PURE_DECLS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGenAISettings(); \
 	friend struct Z_Construct_UClass_UGenAISettings_Statics; \
@@ -40,7 +40,7 @@ public: \
 
 
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_ENHANCED_CONSTRUCTORS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_ENHANCED_CONSTRUCTORS \
 	/** Deleted move- and copy-constructors, should never be used */ \
 	UGenAISettings(UGenAISettings&&) = delete; \
 	UGenAISettings(const UGenAISettings&) = delete; \
@@ -50,13 +50,13 @@ public: \
 	NO_API virtual ~UGenAISettings();
 
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_15_PROLOG
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_GENERATED_BODY \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_16_PROLOG
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_INCLASS_NO_PURE_DECLS \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_18_ENHANCED_CONSTRUCTORS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_INCLASS_NO_PURE_DECLS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h_19_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

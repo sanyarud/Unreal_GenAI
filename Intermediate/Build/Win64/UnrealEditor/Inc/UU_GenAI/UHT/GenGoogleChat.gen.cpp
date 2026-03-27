@@ -124,8 +124,8 @@ struct Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Sta
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatAsync_eventRequestGoogleChatCompletion_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2746569061
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatAsync_eventRequestGoogleChatCompletion_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2746569061
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2097319744
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatAsync_eventRequestGoogleChatCompletion_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2097319744
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_Settings = { "Settings", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatAsync_eventRequestGoogleChatCompletion_Parms, Settings), Z_Construct_UScriptStruct_FGenGoogleChatSettings, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Settings_MetaData), NewProp_Settings_MetaData) }; // 2443905305
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatAsync_eventRequestGoogleChatCompletion_Parms, ReturnValue), Z_Construct_UClass_UGenGoogleChatAsync_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion_Statics::PropPointers[] = {
@@ -223,7 +223,7 @@ struct Z_Construct_UClass_UGenGoogleChatAsync_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion, "RequestGoogleChatCompletion" }, // 3026649962
+		{ &Z_Construct_UFunction_UGenGoogleChatAsync_RequestGoogleChatCompletion, "RequestGoogleChatCompletion" }, // 2326904157
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -370,8 +370,8 @@ struct Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_S
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatStreamAsync_eventRequestGoogleChatStream_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2746569061
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatStreamAsync_eventRequestGoogleChatStream_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2746569061
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2097319744
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatStreamAsync_eventRequestGoogleChatStream_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2097319744
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_Settings = { "Settings", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatStreamAsync_eventRequestGoogleChatStream_Parms, Settings), Z_Construct_UScriptStruct_FGenGoogleChatSettings, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Settings_MetaData), NewProp_Settings_MetaData) }; // 2443905305
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenGoogleChatStreamAsync_eventRequestGoogleChatStream_Parms, ReturnValue), Z_Construct_UClass_UGenGoogleChatStreamAsync_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream_Statics::PropPointers[] = {
@@ -467,7 +467,7 @@ struct Z_Construct_UClass_UGenGoogleChatStreamAsync_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream, "RequestGoogleChatStream" }, // 852992987
+		{ &Z_Construct_UFunction_UGenGoogleChatStreamAsync_RequestGoogleChatStream, "RequestGoogleChatStream" }, // 733302075
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -601,12 +601,12 @@ UGenGoogleChat::~UGenGoogleChat() {}
 struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_Google_GenGoogleChat_h__Script_UU_GenAI_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UGenGoogleChatAsync, UGenGoogleChatAsync::StaticClass, TEXT("UGenGoogleChatAsync"), &Z_Registration_Info_UClass_UGenGoogleChatAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenGoogleChatAsync), 2021674152U) },
-		{ Z_Construct_UClass_UGenGoogleChatStreamAsync, UGenGoogleChatStreamAsync::StaticClass, TEXT("UGenGoogleChatStreamAsync"), &Z_Registration_Info_UClass_UGenGoogleChatStreamAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenGoogleChatStreamAsync), 3648313943U) },
+		{ Z_Construct_UClass_UGenGoogleChatAsync, UGenGoogleChatAsync::StaticClass, TEXT("UGenGoogleChatAsync"), &Z_Registration_Info_UClass_UGenGoogleChatAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenGoogleChatAsync), 2792385770U) },
+		{ Z_Construct_UClass_UGenGoogleChatStreamAsync, UGenGoogleChatStreamAsync::StaticClass, TEXT("UGenGoogleChatStreamAsync"), &Z_Registration_Info_UClass_UGenGoogleChatStreamAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenGoogleChatStreamAsync), 3431599005U) },
 		{ Z_Construct_UClass_UGenGoogleChat, UGenGoogleChat::StaticClass, TEXT("UGenGoogleChat"), &Z_Registration_Info_UClass_UGenGoogleChat, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenGoogleChat), 1880824474U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_Google_GenGoogleChat_h__Script_UU_GenAI_1650637717(TEXT("/Script/UU_GenAI"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_Google_GenGoogleChat_h__Script_UU_GenAI_252231021(TEXT("/Script/UU_GenAI"),
 	Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_Google_GenGoogleChat_h__Script_UU_GenAI_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_Google_GenGoogleChat_h__Script_UU_GenAI_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

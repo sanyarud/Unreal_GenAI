@@ -12,7 +12,9 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeGenAITypes() {}
 
 // ********** Begin Cross Module References ********************************************************
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FDateTime();
 UPackage* Z_Construct_UPackage__Script_UU_GenAI();
+UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenAILanguage();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenAnthropicModel();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenChatRole();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenContentType();
@@ -33,6 +35,7 @@ UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenOAITTSModel();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenOAITTSVoice();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenOllamaModel();
 UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenToolChoice();
+UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAIChatSession();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAISkill();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAISmartRouting();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAnthropicChatSettings();
@@ -56,6 +59,60 @@ UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenTool();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenToolCall();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenToolFunction();
 // ********** End Cross Module References **********************************************************
+
+// ********** Begin Enum EGenAILanguage ************************************************************
+static FEnumRegistrationInfo Z_Registration_Info_UEnum_EGenAILanguage;
+static UEnum* EGenAILanguage_StaticEnum()
+{
+	if (!Z_Registration_Info_UEnum_EGenAILanguage.OuterSingleton)
+	{
+		Z_Registration_Info_UEnum_EGenAILanguage.OuterSingleton = GetStaticEnum(Z_Construct_UEnum_UU_GenAI_EGenAILanguage, (UObject*)Z_Construct_UPackage__Script_UU_GenAI(), TEXT("EGenAILanguage"));
+	}
+	return Z_Registration_Info_UEnum_EGenAILanguage.OuterSingleton;
+}
+template<> UU_GENAI_API UEnum* StaticEnum<EGenAILanguage>()
+{
+	return EGenAILanguage_StaticEnum();
+}
+struct Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
+		{ "BlueprintType", "true" },
+		{ "English.DisplayName", "English" },
+		{ "English.Name", "EGenAILanguage::English" },
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+		{ "Ukrainian.DisplayName", "Ukrainian" },
+		{ "Ukrainian.Name", "EGenAILanguage::Ukrainian" },
+	};
+#endif // WITH_METADATA
+	static constexpr UECodeGen_Private::FEnumeratorParam Enumerators[] = {
+		{ "EGenAILanguage::Ukrainian", (int64)EGenAILanguage::Ukrainian },
+		{ "EGenAILanguage::English", (int64)EGenAILanguage::English },
+	};
+	static const UECodeGen_Private::FEnumParams EnumParams;
+};
+const UECodeGen_Private::FEnumParams Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::EnumParams = {
+	(UObject*(*)())Z_Construct_UPackage__Script_UU_GenAI,
+	nullptr,
+	"EGenAILanguage",
+	"EGenAILanguage",
+	Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::Enumerators,
+	RF_Public|RF_Transient|RF_MarkAsNative,
+	UE_ARRAY_COUNT(Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::Enumerators),
+	EEnumFlags::None,
+	(uint8)UEnum::ECppForm::EnumClass,
+	METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::Enum_MetaDataParams), Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::Enum_MetaDataParams)
+};
+UEnum* Z_Construct_UEnum_UU_GenAI_EGenAILanguage()
+{
+	if (!Z_Registration_Info_UEnum_EGenAILanguage.InnerSingleton)
+	{
+		UECodeGen_Private::ConstructUEnum(Z_Registration_Info_UEnum_EGenAILanguage.InnerSingleton, Z_Construct_UEnum_UU_GenAI_EGenAILanguage_Statics::EnumParams);
+	}
+	return Z_Registration_Info_UEnum_EGenAILanguage.InnerSingleton;
+}
+// ********** End Enum EGenAILanguage **************************************************************
 
 // ********** Begin ScriptStruct FGenAISkill *******************************************************
 static FStructRegistrationInfo Z_Registration_Info_UScriptStruct_FGenAISkill;
@@ -1752,13 +1809,7 @@ struct Z_Construct_UScriptStruct_FGenChatMessage_Statics
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Name_MetaData[] = {
 		{ "Category", "GenAI|Chat" },
-#if !UE_BUILD_SHIPPING
-		{ "Comment", "/** Optional participant name */" },
-#endif
 		{ "ModuleRelativePath", "Public/GenAITypes.h" },
-#if !UE_BUILD_SHIPPING
-		{ "ToolTip", "Optional participant name" },
-#endif
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FBytePropertyParams NewProp_Role_Underlying;
@@ -1814,6 +1865,94 @@ UScriptStruct* Z_Construct_UScriptStruct_FGenChatMessage()
 	return Z_Registration_Info_UScriptStruct_FGenChatMessage.InnerSingleton;
 }
 // ********** End ScriptStruct FGenChatMessage *****************************************************
+
+// ********** Begin ScriptStruct FGenAIChatSession *************************************************
+static FStructRegistrationInfo Z_Registration_Info_UScriptStruct_FGenAIChatSession;
+class UScriptStruct* FGenAIChatSession::StaticStruct()
+{
+	if (!Z_Registration_Info_UScriptStruct_FGenAIChatSession.OuterSingleton)
+	{
+		Z_Registration_Info_UScriptStruct_FGenAIChatSession.OuterSingleton = GetStaticStruct(Z_Construct_UScriptStruct_FGenAIChatSession, (UObject*)Z_Construct_UPackage__Script_UU_GenAI(), TEXT("GenAIChatSession"));
+	}
+	return Z_Registration_Info_UScriptStruct_FGenAIChatSession.OuterSingleton;
+}
+struct Z_Construct_UScriptStruct_FGenAIChatSession_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Struct_MetaDataParams[] = {
+		{ "BlueprintType", "true" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n * A logical chat session containing message history.\n */" },
+#endif
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "A logical chat session containing message history." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SessionId_MetaData[] = {
+		{ "Category", "GenAI|Chat" },
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Title_MetaData[] = {
+		{ "Category", "GenAI|Chat" },
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_History_MetaData[] = {
+		{ "Category", "GenAI|Chat" },
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_LastUpdated_MetaData[] = {
+		{ "Category", "GenAI|Chat" },
+		{ "ModuleRelativePath", "Public/GenAITypes.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStrPropertyParams NewProp_SessionId;
+	static const UECodeGen_Private::FStrPropertyParams NewProp_Title;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_History_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_History;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_LastUpdated;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static void* NewStructOps()
+	{
+		return (UScriptStruct::ICppStructOps*)new UScriptStruct::TCppStructOps<FGenAIChatSession>();
+	}
+	static const UECodeGen_Private::FStructParams StructParams;
+};
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_SessionId = { "SessionId", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FGenAIChatSession, SessionId), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SessionId_MetaData), NewProp_SessionId_MetaData) };
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_Title = { "Title", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FGenAIChatSession, Title), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Title_MetaData), NewProp_Title_MetaData) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_History_Inner = { "History", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2097319744
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_History = { "History", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FGenAIChatSession, History), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_History_MetaData), NewProp_History_MetaData) }; // 2097319744
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_LastUpdated = { "LastUpdated", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(FGenAIChatSession, LastUpdated), Z_Construct_UScriptStruct_FDateTime, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LastUpdated_MetaData), NewProp_LastUpdated_MetaData) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FGenAIChatSession_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_SessionId,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_Title,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_History_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_History,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewProp_LastUpdated,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGenAIChatSession_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FStructParams Z_Construct_UScriptStruct_FGenAIChatSession_Statics::StructParams = {
+	(UObject* (*)())Z_Construct_UPackage__Script_UU_GenAI,
+	nullptr,
+	&NewStructOps,
+	"GenAIChatSession",
+	Z_Construct_UScriptStruct_FGenAIChatSession_Statics::PropPointers,
+	UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGenAIChatSession_Statics::PropPointers),
+	sizeof(FGenAIChatSession),
+	alignof(FGenAIChatSession),
+	RF_Public|RF_Transient|RF_MarkAsNative,
+	EStructFlags(0x00000001),
+	METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FGenAIChatSession_Statics::Struct_MetaDataParams), Z_Construct_UScriptStruct_FGenAIChatSession_Statics::Struct_MetaDataParams)
+};
+UScriptStruct* Z_Construct_UScriptStruct_FGenAIChatSession()
+{
+	if (!Z_Registration_Info_UScriptStruct_FGenAIChatSession.InnerSingleton)
+	{
+		UECodeGen_Private::ConstructUScriptStruct(Z_Registration_Info_UScriptStruct_FGenAIChatSession.InnerSingleton, Z_Construct_UScriptStruct_FGenAIChatSession_Statics::StructParams);
+	}
+	return Z_Registration_Info_UScriptStruct_FGenAIChatSession.InnerSingleton;
+}
+// ********** End ScriptStruct FGenAIChatSession ***************************************************
 
 // ********** Begin ScriptStruct FGenToolFunction **************************************************
 static FStructRegistrationInfo Z_Registration_Info_UScriptStruct_FGenToolFunction;
@@ -3801,6 +3940,7 @@ UScriptStruct* Z_Construct_UScriptStruct_FGenModelInfo()
 struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_Statics
 {
 	static constexpr FEnumRegisterCompiledInInfo EnumInfo[] = {
+		{ EGenAILanguage_StaticEnum, TEXT("EGenAILanguage"), &Z_Registration_Info_UEnum_EGenAILanguage, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 439263932U) },
 		{ EGenOAIModel_StaticEnum, TEXT("EGenOAIModel"), &Z_Registration_Info_UEnum_EGenOAIModel, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 859855960U) },
 		{ EGenAnthropicModel_StaticEnum, TEXT("EGenAnthropicModel"), &Z_Registration_Info_UEnum_EGenAnthropicModel, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 2885867214U) },
 		{ EGenGoogleModel_StaticEnum, TEXT("EGenGoogleModel"), &Z_Registration_Info_UEnum_EGenGoogleModel, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 420420543U) },
@@ -3827,7 +3967,8 @@ struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_Ge
 		{ FGenAISmartRouting::StaticStruct, Z_Construct_UScriptStruct_FGenAISmartRouting_Statics::NewStructOps, TEXT("GenAISmartRouting"), &Z_Registration_Info_UScriptStruct_FGenAISmartRouting, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenAISmartRouting), 3808532415U) },
 		{ FGenChatImageUrl::StaticStruct, Z_Construct_UScriptStruct_FGenChatImageUrl_Statics::NewStructOps, TEXT("GenChatImageUrl"), &Z_Registration_Info_UScriptStruct_FGenChatImageUrl, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenChatImageUrl), 1198180960U) },
 		{ FGenChatContentPart::StaticStruct, Z_Construct_UScriptStruct_FGenChatContentPart_Statics::NewStructOps, TEXT("GenChatContentPart"), &Z_Registration_Info_UScriptStruct_FGenChatContentPart, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenChatContentPart), 4165666317U) },
-		{ FGenChatMessage::StaticStruct, Z_Construct_UScriptStruct_FGenChatMessage_Statics::NewStructOps, TEXT("GenChatMessage"), &Z_Registration_Info_UScriptStruct_FGenChatMessage, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenChatMessage), 2746569061U) },
+		{ FGenChatMessage::StaticStruct, Z_Construct_UScriptStruct_FGenChatMessage_Statics::NewStructOps, TEXT("GenChatMessage"), &Z_Registration_Info_UScriptStruct_FGenChatMessage, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenChatMessage), 2097319744U) },
+		{ FGenAIChatSession::StaticStruct, Z_Construct_UScriptStruct_FGenAIChatSession_Statics::NewStructOps, TEXT("GenAIChatSession"), &Z_Registration_Info_UScriptStruct_FGenAIChatSession, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenAIChatSession), 2623025062U) },
 		{ FGenToolFunction::StaticStruct, Z_Construct_UScriptStruct_FGenToolFunction_Statics::NewStructOps, TEXT("GenToolFunction"), &Z_Registration_Info_UScriptStruct_FGenToolFunction, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenToolFunction), 256918253U) },
 		{ FGenTool::StaticStruct, Z_Construct_UScriptStruct_FGenTool_Statics::NewStructOps, TEXT("GenTool"), &Z_Registration_Info_UScriptStruct_FGenTool, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenTool), 2447510402U) },
 		{ FGenToolCall::StaticStruct, Z_Construct_UScriptStruct_FGenToolCall_Statics::NewStructOps, TEXT("GenToolCall"), &Z_Registration_Info_UScriptStruct_FGenToolCall, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenToolCall), 785198040U) },
@@ -3847,7 +3988,7 @@ struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_Ge
 		{ FGenModelInfo::StaticStruct, Z_Construct_UScriptStruct_FGenModelInfo_Statics::NewStructOps, TEXT("GenModelInfo"), &Z_Registration_Info_UScriptStruct_FGenModelInfo, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FGenModelInfo), 2270525479U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_93978180(TEXT("/Script/UU_GenAI"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_4052335660(TEXT("/Script/UU_GenAI"),
 	nullptr, 0,
 	Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_Statics::ScriptStructInfo),
 	Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAITypes_h__Script_UU_GenAI_Statics::EnumInfo));

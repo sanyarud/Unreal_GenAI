@@ -20,6 +20,7 @@ public class UU_GenAI : ModuleRules
             "Slate",
             "SlateCore",
             "InputCore",
+            "ApplicationCore",
             "UMG",
         });
 
@@ -35,6 +36,12 @@ public class UU_GenAI : ModuleRules
                 "UnrealEd",
                 "ContentBrowser",
                 "AssetRegistry",
+                "Kismet",
+                "AssetTools",
+                "BlueprintGraph",
+                "KismetCompiler",
+                "EditorSubsystem",
+                "LevelEditor",
             });
         }
     }

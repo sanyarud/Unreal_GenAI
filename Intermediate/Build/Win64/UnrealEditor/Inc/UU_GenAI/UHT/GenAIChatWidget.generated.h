@@ -19,7 +19,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 class UObject;
 
 // ********** Begin Class UGenAIChatWidget *********************************************************
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execIsGenAIChatOpen); \
 	DECLARE_FUNCTION(execCloseGenAIChat); \
 	DECLARE_FUNCTION(execOpenGenAIChat);
@@ -27,7 +27,7 @@ class UObject;
 
 UU_GENAI_API UClass* Z_Construct_UClass_UGenAIChatWidget_NoRegister();
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_INCLASS_NO_PURE_DECLS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUGenAIChatWidget(); \
 	friend struct Z_Construct_UClass_UGenAIChatWidget_Statics; \
@@ -38,7 +38,7 @@ public: \
 	DECLARE_SERIALIZER(UGenAIChatWidget)
 
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_ENHANCED_CONSTRUCTORS \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UGenAIChatWidget(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	/** Deleted move- and copy-constructors, should never be used */ \
@@ -50,13 +50,13 @@ public: \
 	NO_API virtual ~UGenAIChatWidget();
 
 
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_116_PROLOG
-#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_GENERATED_BODY \
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_132_PROLOG
+#define FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_INCLASS_NO_PURE_DECLS \
-	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_119_ENHANCED_CONSTRUCTORS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_INCLASS_NO_PURE_DECLS \
+	FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_UI_GenAIChatWidget_h_135_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

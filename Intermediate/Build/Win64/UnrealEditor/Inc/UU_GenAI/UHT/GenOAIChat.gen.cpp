@@ -126,8 +126,8 @@ struct Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Static
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenOAIChatAsync_eventRequestOpenAIChatCompletion_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2746569061
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenOAIChatAsync_eventRequestOpenAIChatCompletion_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2746569061
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_Messages_Inner = { "Messages", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenChatMessage, METADATA_PARAMS(0, nullptr) }; // 2097319744
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_Messages = { "Messages", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenOAIChatAsync_eventRequestOpenAIChatCompletion_Parms, Messages), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Messages_MetaData), NewProp_Messages_MetaData) }; // 2097319744
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_Settings = { "Settings", nullptr, (EPropertyFlags)0x0010000008000182, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenOAIChatAsync_eventRequestOpenAIChatCompletion_Parms, Settings), Z_Construct_UScriptStruct_FGenOAIChatSettings, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Settings_MetaData), NewProp_Settings_MetaData) }; // 1339542557
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(GenOAIChatAsync_eventRequestOpenAIChatCompletion_Parms, ReturnValue), Z_Construct_UClass_UGenOAIChatAsync_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion_Statics::PropPointers[] = {
@@ -237,7 +237,7 @@ struct Z_Construct_UClass_UGenOAIChatAsync_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion, "RequestOpenAIChatCompletion" }, // 1938145457
+		{ &Z_Construct_UFunction_UGenOAIChatAsync_RequestOpenAIChatCompletion, "RequestOpenAIChatCompletion" }, // 3882216717
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -375,11 +375,11 @@ UGenOAIChat::~UGenOAIChat() {}
 struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_OpenAI_GenOAIChat_h__Script_UU_GenAI_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UGenOAIChatAsync, UGenOAIChatAsync::StaticClass, TEXT("UGenOAIChatAsync"), &Z_Registration_Info_UClass_UGenOAIChatAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenOAIChatAsync), 4187152502U) },
+		{ Z_Construct_UClass_UGenOAIChatAsync, UGenOAIChatAsync::StaticClass, TEXT("UGenOAIChatAsync"), &Z_Registration_Info_UClass_UGenOAIChatAsync, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenOAIChatAsync), 1165595678U) },
 		{ Z_Construct_UClass_UGenOAIChat, UGenOAIChat::StaticClass, TEXT("UGenOAIChat"), &Z_Registration_Info_UClass_UGenOAIChat, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenOAIChat), 4160174091U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_OpenAI_GenOAIChat_h__Script_UU_GenAI_3881134958(TEXT("/Script/UU_GenAI"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_OpenAI_GenOAIChat_h__Script_UU_GenAI_197482698(TEXT("/Script/UU_GenAI"),
 	Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_OpenAI_GenOAIChat_h__Script_UU_GenAI_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_OpenAI_GenOAIChat_h__Script_UU_GenAI_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

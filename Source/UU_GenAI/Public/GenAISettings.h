@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+#include "GenAITypes.h"
 #include "GenAISettings.generated.h"
 
 /**
@@ -88,6 +89,14 @@ public:
     UPROPERTY(Config, EditAnywhere, Category = "Debugging", meta = (DisplayName = "Enable Extended Logging"))
     bool bExtendedLogging = false;
 
+    // ─── Language ─────────────────────────────────────────────────────────────
+
+    /**
+     * Preferred language for AI responses.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Language", meta = (DisplayName = "Preferred Language"))
+    EGenAILanguage DefaultLanguage = EGenAILanguage::Ukrainian;
+
     // ─── Skills ───────────────────────────────────────────────────────────────
 
     /**
@@ -103,6 +112,47 @@ public:
      */
     UPROPERTY(Config, EditAnywhere, Category = "Smart Routing")
     FGenAISmartRouting SmartRouting;
+
+    // ─── Model Management ──────────────────────────────────────────────────────
+
+    /**
+     * Map of model IDs to their 'Enabled' status.
+     * If a model is not here, it is enabled by default.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Management", meta = (DisplayName = "Enabled Models"))
+    TMap<FString, bool> EnabledModels;
+
+    /**
+     * Default model ID for general chat.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Management", meta = (DisplayName = "Default Chat Model"))
+    FString DefaultChatModelId = TEXT("gpt-4o");
+
+    /**
+     * Default model ID for code generation tools.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Management", meta = (DisplayName = "Default Code Model"))
+    FString DefaultCodeModelId = TEXT("claude-3-5-sonnet-20240620");
+
+    /**
+     * Aggressiveness / Temperature (0.0 to 2.0).
+     * Lower values (0.2) make the model more deterministic/focused.
+     * Higher values (0.8+) make it more creative/aggressive.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Parameters", meta = (UIMin = "0.0", UIMax = "2.0", ClampMin = "0.0", ClampMax = "2.0", DisplayName = "Aggressiveness (Temperature)"))
+    float Temperature = 0.7f;
+
+    /**
+     * Maximum response tokens for a single request.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Parameters", meta = (UIMin = "1", UIMax = "128000", ClampMin = "1", ClampMax = "128000", DisplayName = "Max Tokens (Context Size Limit)"))
+    int32 MaxTokens = 4096;
+
+    /**
+     * How many previous messages to keep in memory for context.
+     */
+    UPROPERTY(Config, EditAnywhere, Category = "Model Parameters", meta = (UIMin = "1", UIMax = "100", ClampMin = "1", ClampMax = "100", DisplayName = "Max Conversation History"))
+    int32 MaxContextHistory = 20;
 
     // ─── Helpers ─────────────────────────────────────────────────────────────
 

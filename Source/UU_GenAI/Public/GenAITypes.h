@@ -5,6 +5,13 @@
 #include "CoreMinimal.h"
 #include "GenAITypes.generated.h"
 
+UENUM(BlueprintType)
+enum class EGenAILanguage : uint8
+{
+    Ukrainian   UMETA(DisplayName = "Ukrainian"),
+    English     UMETA(DisplayName = "English")
+};
+
 // ─────────────────────────────────────────────
 //  SKILLS & SMART ROUTING
 // ─────────────────────────────────────────────
@@ -309,9 +316,36 @@ struct FGenChatMessage
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
     FString ToolCallId;
 
-    /** Optional participant name */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
     FString Name;
+};
+
+/**
+ * A logical chat session containing message history.
+ */
+USTRUCT(BlueprintType)
+struct FGenAIChatSession
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
+    FString SessionId;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
+    FString Title;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
+    TArray<FGenChatMessage> History;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
+    FDateTime LastUpdated;
+
+    FGenAIChatSession() 
+    { 
+        SessionId = FGuid::NewGuid().ToString(); 
+        LastUpdated = FDateTime::Now(); 
+        Title = TEXT("New Chat"); 
+    }
 };
 
 // ─────────────────────────────────────────────

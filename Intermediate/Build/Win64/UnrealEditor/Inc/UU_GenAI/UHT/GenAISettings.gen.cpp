@@ -17,6 +17,7 @@ DEVELOPERSETTINGS_API UClass* Z_Construct_UClass_UDeveloperSettings();
 UPackage* Z_Construct_UPackage__Script_UU_GenAI();
 UU_GENAI_API UClass* Z_Construct_UClass_UGenAISettings();
 UU_GENAI_API UClass* Z_Construct_UClass_UGenAISettings_NoRegister();
+UU_GENAI_API UEnum* Z_Construct_UEnum_UU_GenAI_EGenAILanguage();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAISkill();
 UU_GENAI_API UScriptStruct* Z_Construct_UScriptStruct_FGenAISmartRouting();
 // ********** End Cross Module References **********************************************************
@@ -416,6 +417,17 @@ struct Z_Construct_UClass_UGenAISettings_Statics
 		{ "ToolTip", "Enable extended request/response logging.\nBase64 image data is truncated to avoid flooding the output log." },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultLanguage_MetaData[] = {
+		{ "Category", "Language" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Preferred language for AI responses.\n     */" },
+#endif
+		{ "DisplayName", "Preferred Language" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Preferred language for AI responses." },
+#endif
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Skills_MetaData[] = {
 		{ "Category", "Skills" },
 #if !UE_BUILD_SHIPPING
@@ -437,6 +449,84 @@ struct Z_Construct_UClass_UGenAISettings_Statics
 		{ "ToolTip", "Automatic task delegation based on input intent." },
 #endif
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_EnabledModels_MetaData[] = {
+		{ "Category", "Model Management" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Map of model IDs to their 'Enabled' status.\n     * If a model is not here, it is enabled by default.\n     */" },
+#endif
+		{ "DisplayName", "Enabled Models" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Map of model IDs to their 'Enabled' status.\nIf a model is not here, it is enabled by default." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultChatModelId_MetaData[] = {
+		{ "Category", "Model Management" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Default model ID for general chat.\n     */" },
+#endif
+		{ "DisplayName", "Default Chat Model" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Default model ID for general chat." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_DefaultCodeModelId_MetaData[] = {
+		{ "Category", "Model Management" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Default model ID for code generation tools.\n     */" },
+#endif
+		{ "DisplayName", "Default Code Model" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Default model ID for code generation tools." },
+#endif
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Temperature_MetaData[] = {
+		{ "Category", "Model Parameters" },
+		{ "ClampMax", "2.0" },
+		{ "ClampMin", "0.0" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Aggressiveness / Temperature (0.0 to 2.0).\n     * Lower values (0.2) make the model more deterministic/focused.\n     * Higher values (0.8+) make it more creative/aggressive.\n     */" },
+#endif
+		{ "DisplayName", "Aggressiveness (Temperature)" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Aggressiveness / Temperature (0.0 to 2.0).\nLower values (0.2) make the model more deterministic/focused.\nHigher values (0.8+) make it more creative/aggressive." },
+#endif
+		{ "UIMax", "2.0" },
+		{ "UIMin", "0.0" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MaxTokens_MetaData[] = {
+		{ "Category", "Model Parameters" },
+		{ "ClampMax", "128000" },
+		{ "ClampMin", "1" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * Maximum response tokens for a single request.\n     */" },
+#endif
+		{ "DisplayName", "Max Tokens (Context Size Limit)" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "Maximum response tokens for a single request." },
+#endif
+		{ "UIMax", "128000" },
+		{ "UIMin", "1" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_MaxContextHistory_MetaData[] = {
+		{ "Category", "Model Parameters" },
+		{ "ClampMax", "100" },
+		{ "ClampMin", "1" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "/**\n     * How many previous messages to keep in memory for context.\n     */" },
+#endif
+		{ "DisplayName", "Max Conversation History" },
+		{ "ModuleRelativePath", "Public/GenAISettings.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "How many previous messages to keep in memory for context." },
+#endif
+		{ "UIMax", "100" },
+		{ "UIMin", "1" },
+	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FStrPropertyParams NewProp_OpenAIKey_Obfuscated;
 	static const UECodeGen_Private::FStrPropertyParams NewProp_OpenAIBaseUrl;
@@ -450,9 +540,19 @@ struct Z_Construct_UClass_UGenAISettings_Statics
 	static const UECodeGen_Private::FStrPropertyParams NewProp_ProxyAuthHeader;
 	static void NewProp_bExtendedLogging_SetBit(void* Obj);
 	static const UECodeGen_Private::FBoolPropertyParams NewProp_bExtendedLogging;
+	static const UECodeGen_Private::FBytePropertyParams NewProp_DefaultLanguage_Underlying;
+	static const UECodeGen_Private::FEnumPropertyParams NewProp_DefaultLanguage;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_Skills_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_Skills;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_SmartRouting;
+	static const UECodeGen_Private::FBoolPropertyParams NewProp_EnabledModels_ValueProp;
+	static const UECodeGen_Private::FStrPropertyParams NewProp_EnabledModels_Key_KeyProp;
+	static const UECodeGen_Private::FMapPropertyParams NewProp_EnabledModels;
+	static const UECodeGen_Private::FStrPropertyParams NewProp_DefaultChatModelId;
+	static const UECodeGen_Private::FStrPropertyParams NewProp_DefaultCodeModelId;
+	static const UECodeGen_Private::FFloatPropertyParams NewProp_Temperature;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_MaxTokens;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_MaxContextHistory;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
@@ -483,9 +583,19 @@ void Z_Construct_UClass_UGenAISettings_Statics::NewProp_bExtendedLogging_SetBit(
 	((UGenAISettings*)Obj)->bExtendedLogging = 1;
 }
 const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_bExtendedLogging = { "bExtendedLogging", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), sizeof(UGenAISettings), &Z_Construct_UClass_UGenAISettings_Statics::NewProp_bExtendedLogging_SetBit, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_bExtendedLogging_MetaData), NewProp_bExtendedLogging_MetaData) };
+const UECodeGen_Private::FBytePropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultLanguage_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, nullptr, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultLanguage = { "DefaultLanguage", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, DefaultLanguage), Z_Construct_UEnum_UU_GenAI_EGenAILanguage, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultLanguage_MetaData), NewProp_DefaultLanguage_MetaData) }; // 439263932
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_Skills_Inner = { "Skills", nullptr, (EPropertyFlags)0x0000000000004000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FGenAISkill, METADATA_PARAMS(0, nullptr) }; // 2767298060
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_Skills = { "Skills", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, Skills), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Skills_MetaData), NewProp_Skills_MetaData) }; // 2767298060
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_SmartRouting = { "SmartRouting", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, SmartRouting), Z_Construct_UScriptStruct_FGenAISmartRouting, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SmartRouting_MetaData), NewProp_SmartRouting_MetaData) }; // 3808532415
+const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels_ValueProp = { "EnabledModels", nullptr, (EPropertyFlags)0x0000000000004001, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, sizeof(bool), 0, nullptr, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels_Key_KeyProp = { "EnabledModels_Key", nullptr, (EPropertyFlags)0x0000000000004001, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FMapPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels = { "EnabledModels", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Map, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, EnabledModels), EMapPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_EnabledModels_MetaData), NewProp_EnabledModels_MetaData) };
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultChatModelId = { "DefaultChatModelId", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, DefaultChatModelId), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultChatModelId_MetaData), NewProp_DefaultChatModelId_MetaData) };
+const UECodeGen_Private::FStrPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultCodeModelId = { "DefaultCodeModelId", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, DefaultCodeModelId), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_DefaultCodeModelId_MetaData), NewProp_DefaultCodeModelId_MetaData) };
+const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_Temperature = { "Temperature", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, Temperature), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Temperature_MetaData), NewProp_Temperature_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_MaxTokens = { "MaxTokens", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, MaxTokens), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxTokens_MetaData), NewProp_MaxTokens_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_UGenAISettings_Statics::NewProp_MaxContextHistory = { "MaxContextHistory", nullptr, (EPropertyFlags)0x0010000000004001, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(UGenAISettings, MaxContextHistory), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_MaxContextHistory_MetaData), NewProp_MaxContextHistory_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGenAISettings_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_OpenAIKey_Obfuscated,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_OpenAIBaseUrl,
@@ -498,9 +608,19 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UGenAISet
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_ProxyUrl,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_ProxyAuthHeader,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_bExtendedLogging,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultLanguage_Underlying,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultLanguage,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_Skills_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_Skills,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_SmartRouting,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels_ValueProp,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels_Key_KeyProp,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_EnabledModels,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultChatModelId,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_DefaultCodeModelId,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_Temperature,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_MaxTokens,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UGenAISettings_Statics::NewProp_MaxContextHistory,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_UGenAISettings_Statics::PropPointers) < 2048);
 UObject* (*const Z_Construct_UClass_UGenAISettings_Statics::DependentSingletons[])() = {
@@ -539,10 +659,10 @@ UGenAISettings::~UGenAISettings() {}
 struct Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h__Script_UU_GenAI_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UGenAISettings, UGenAISettings::StaticClass, TEXT("UGenAISettings"), &Z_Registration_Info_UClass_UGenAISettings, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenAISettings), 2701097349U) },
+		{ Z_Construct_UClass_UGenAISettings, UGenAISettings::StaticClass, TEXT("UGenAISettings"), &Z_Registration_Info_UClass_UGenAISettings, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UGenAISettings), 1789721373U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h__Script_UU_GenAI_1495199900(TEXT("/Script/UU_GenAI"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h__Script_UU_GenAI_2372021060(TEXT("/Script/UU_GenAI"),
 	Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h__Script_UU_GenAI_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_The_Rebirth_Fight_Plugins_UU_GenAI_Source_UU_GenAI_Public_GenAISettings_h__Script_UU_GenAI_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
