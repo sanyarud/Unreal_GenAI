@@ -1,0 +1,24 @@
+{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.0.0",
+    "FriendlyName": "GenAI for Unreal",
+    "Description": "Integrate 30+ AI models including OpenAI GPT, Anthropic Claude, Google Gemini, and more into your Unreal Engine projects with full Blueprint and C++ support.",
+    "Category": "AI",
+    "CreatedBy": "UU Plugin",
+    "CreatedByURL": "",
+    "DocsURL": "",
+    "MarketplaceURL": "",
+    "SupportURL": "",
+    "CanContainContent": false,
+    "IsBetaVersion": false,
+    "IsExperimentalVersion": false,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "UU_GenAI",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        }
+    ]
+}

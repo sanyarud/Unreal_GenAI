@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "unreal-engine-cpp-pro": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "30986728e847fde5c3ed571eb6edb9b5320f82c9e9f0855fde3f3148a8c79ce0"
+    }
+  }
+}
