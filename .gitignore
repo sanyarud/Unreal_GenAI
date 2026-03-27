@@ -1,0 +1,13 @@
+/Binaries
+/Intermediate
+/DerivedDataCache
+/Saved
+/.vs
+/*.sln
+/*.uproject
+/.agents
+/.claude
+/skills-lock.json
+*.log
+*.pdb
+*.obj
