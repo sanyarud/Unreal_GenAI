@@ -1,214 +1,56 @@
-# GenAI для Unreal
-
-Плагін для Unreal Engine 5, що інтегрує 30+ AI моделей у твої проекти з повною підтримкою **Blueprint та C++**.
-
-## Підтримувані провайдери
-
-| Провайдер | Чат | Стрімінг | TTS | Зображення | Транскрипція | Моделі |
-|-----------|:---:|:--------:|:---:|:----------:|:------------:|:------:|
-| OpenAI (GPT-4o, GPT-4.1, o1, o3...) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Anthropic (Claude Opus/Sonnet/Haiku) | ✅ | ✅ | — | — | — | — |
-| Google (Gemini 2.0 Flash, 1.5 Pro...) | ✅ | ✅ | ✅ | — | — | — |
-| DeepSeek / Mistral | ✅ | ✅ | — | — | — | — |
-| Ollama (Локальні моделі) | ✅ | ✅ | — | — | — | ✅ |
-| Будь-який OpenAI-сумісний endpoint | ✅ | ✅ | — | — | — | — |
-
-## Нові можливості (v2.0)
-
-### 1. Локальний ШІ (Ollama)
-Плагін тепер автоматично підключається до вашого локального сервера Ollama.
-- **Авто-виявлення:** Моделі автоматично підтягуються з вашого сервера (за замовчуванням `http://192.168.3.214:11434`) та з'являються у списку вибору.
-- **Повна підтримка стрімінгу:** Локальні моделі працюють так само швидко, як і хмарні.
-
-### 2. Система Скілів (Skills)
-Створюйте "експертів" з власними системними промптами.
-- **Тригери:** Плагін автоматично активує потрібний системний промпт, якщо у вашому повідомленні є ключові слова (наприклад, "blueprint", "c++", "ui").
-- **Експертний контекст:** Наприклад, скіл "C++ Pro" змусить модель слідувати стандартам Unreal Engine при написанні коду.
-
-### 3. Розумна Маршрутизація (Smart Routing)
-Плагін сам розуміє, яку модель краще використати для завдання.
-- **Авто-перемикання:** Якщо ви питаєте про код, чат може автоматично перемкнутись на DeepSeek або локальну кодинг-модель.
-- **Налаштування:** Ви самі обираєте провайдера та модель для "розумної" маршрутизації в налаштуваннях проекту.
-
-## Встановлення
-
-1. Скопіюй папку `UU_GenAI` у директорію `Plugins/` свого проекту.
-2. Додай у `.uproject`:
-```json
-{
-  "Name": "UU_GenAI",
-  "Enabled": true
-}
-```
-3. Перегенеруй файли проекту та збери.
-
-## Швидкий старт
-
-### Blueprint
-
-1. Відкрий **Project Settings → Plugins → GenAI Plugin** і встав свій API ключ.
-2. Додай ноду **Request OpenAI Chat Completion** у Blueprint.
-3. Підключи **Make Gen Chat Message** (Role: User, Content: твій запит) → масив Messages.
-4. Підключи **OnComplete → Response → Content** до Print String.
-
-### C++
-
-```cpp
-#include "OpenAI/GenOAIChat.h"
-
-TWeakObjectPtr<AMyActor> WeakThis(this);
-
-FGenOAIChatSettings Settings;
-
-TArray<FGenChatMessage> Messages;
-FGenChatMessage& Msg = Messages.AddDefaulted_GetRef();
-Msg.Role = EGenChatRole::User;
-Msg.Content = TEXT("Розкажи жарт.");
-
-UGenOAIChat::SendChatRequest(Messages, Settings,
-    FOnOAIChatCompleteNative::CreateLambda(
-        [WeakThis](const FGenChatResponse& Response, bool bSuccess)
-        {
-            if (!WeakThis.IsValid()) return;
-            if (bSuccess)
-                UE_LOG(LogTemp, Log, TEXT("%s"), *Response.Content);
-        }));
-```
-
-### Стрімінг (токен за токеном)
-
-```cpp
-#include "OpenAI/GenOAIChatStream.h"
-
-UGenOAIChatStream::SendStreamChatRequest(Messages, Settings,
-    FOnOAIStreamDeltaNative::CreateLambda(
-        [WeakThis](const FGenStreamDelta& Delta, bool bSuccess)
-        {
-            if (!WeakThis.IsValid() || !bSuccess) return;
-            // Delta.ContentDelta      — нові токени цього чанку
-            // Delta.ContentAccumulated — повний текст на цей момент
-            // Delta.bIsDone           — true на останньому чанку
-        }));
-```
-
-## Чат-віджет
-
-Готовий до використання чат-панель прямо у грі чи редакторі — виглядає і відчувається як сучасний AI-чат.
-
-**Відкрити з Blueprint:**
-```
-Open GenAI Chat (WorldContextObject)
-```
-
-**Або з C++:**
-```cpp
-#include "UI/GenAIChatWidget.h"
-UGenAIChatWidget::OpenGenAIChat(WorldContextObject);
-```
-
-Можливості:
-- **16 моделей** у випадаючому списку, згрупованих по провайдерах (OpenAI, Anthropic, Google, DeepSeek, Mistral)
-- **Стрімінг** відповідей з живим курсором `▌` для OpenAI, Anthropic і Google
-- **Прикріплення Blueprint** — вибери Blueprint-ассет у Content Browser і натисни скріпку, щоб передати його властивості, функції та компоненти як контекст (тільки Editor)
-- **Enter для відправлення**, кнопка закриття, повноекранний темний оверлей
-- Чистий Slate (`SGenAIChatWidget`) обгорнутий у `UWidget` (`UGenAIChatWidget`) для використання у Widget Blueprints
-
-## Можливості
-
-- **Chat completions** — всі основні провайдери, з підтримкою vision (мультимодальність)
-- **Стрімінг у реальному часі** — SSE-стрімінг токенів для OpenAI, Anthropic, Google
-- **Вбудований чат-віджет** — повна UI-панель з вибором моделі та прикріпленням Blueprint
-- **Tool / Function calling** — масив `FGenTool`, працює в Blueprint та C++
-- **Структурований вивід** — примусовий JSON Schema (`bStructuredOutput` у налаштуваннях)
-- **Text-to-Speech** — OpenAI TTS (tts-1, tts-1-hd, gpt-4o-mini-tts) + Google Cloud TTS
-- **Транскрипція аудіо** — OpenAI Whisper, multipart upload
-- **Генерація та редагування зображень** — DALL-E 2/3, gpt-image-1
-- **Список моделей** — отримай доступні моделі під час виконання
-- **Безпечне зберігання API ключів** — XOR + Base64 обфускація, не зберігається відкритим текстом
-- **Підтримка проксі** — передай весь трафік через кастомну URL
-- **OpenAI-сумісний режим** — вкажи будь-який сумісний endpoint (Groq, Together, Ollama тощо)
-
-## Налаштування
-
-Всі налаштування знаходяться у **Project Settings → Plugins → GenAI Plugin** (`UGenAISettings`).
-
-| Поле | Опис |
-|------|------|
-| OpenAI API Key | Ключ `sk-...` з platform.openai.com |
-| Anthropic API Key | Ключ з console.anthropic.com |
-| Google AI API Key | Ключ з aistudio.google.com |
-| DeepSeek / Mistral API Key | Ключі конкретних провайдерів |
-| OpenAI Base URL Override | Кастомний endpoint, напр. для Groq або Ollama |
-| Proxy URL | Маршрутизуй весь трафік через проксі-сервер |
-| Enable Extended Logging | Логувати тіла запитів/відповідей (base64 обрізання) |
-
-Також можна встановити ключі під час виконання:
-```cpp
-GetMutableDefault<UGenAISettings>()->SetOpenAIKey(TEXT("sk-..."));
-```
-
-## Архітектура
-
-```
-Source/UU_GenAI/
-├── Public/
-│   ├── GenAITypes.h          # Всі структури та enum'и
-│   ├── GenAISettings.h       # UDeveloperSettings
-│   ├── GenAIUtils.h          # Внутрішні JSON/HTTP хелпери
-│   ├── OpenAI/               # GenOAIChat, GenOAIChatStream, GenOAITTS,
-│   │                         #   GenOAITranscription, GenOAIImageGen, GenOAIModels
-│   ├── Anthropic/            # GenAnthropicChat, GenAnthropicChatStream
-│   ├── Google/               # GenGoogleChat, GenGoogleTTS
-│   ├── Compat/               # GenCompatChat (DeepSeek, Mistral, generic)
-│   └── UI/                   # GenAIChatWidget (Slate + UMG чат-панель)
-└── Private/                  # Реалізації
-```
-
-Кожен провайдер слідує одному шаблону:
-- **Blueprint нода** — підклас `UCancellableAsyncAction`, `Request<Provider><Feature>`
-- **C++ статичний клас** — `Send<Feature>Request(...)` + нативний делегат
-
-## Версія рушія
-
-Протестовано на **Unreal Engine 5.6**. Повинно працювати на UE 5.3+.
-
-## Ліцензія
-
-MIT
-
----
-
 # GenAI for Unreal
 
 An Unreal Engine 5 plugin that integrates 30+ AI models into your projects with full **Blueprint and C++** support.
 
 ## Supported Providers
 
-| Provider | Chat | Stream | TTS | Image | Transcription | Models |
-|----------|:----:|:------:|:---:|:-----:|:-------------:|:------:|
-| OpenAI (GPT-4o, GPT-4.1, o1, o3...) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Anthropic (Claude Opus/Sonnet/Haiku) | ✅ | ✅ | — | — | — | — |
-| Google (Gemini 2.0 Flash, 1.5 Pro...) | ✅ | ✅ | ✅ | — | — | — |
+| Provider | Chat | Stream | Tool Calling | TTS | Image | Transcription |
+|----------|:----:|:------:|:------------:|:---:|:-----:|:-------------:|
+| OpenAI (GPT-4o, o1, o3...) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Anthropic (Claude 3.7/3.5 Sonnet, Haiku, Opus) | ✅ | ✅ | ✅ | — | — | — |
+| Google (Gemini 2.0 Flash, 1.5 Pro...) | ✅ | ✅ | ✅ | ✅ | — | — |
 | DeepSeek / Mistral | ✅ | ✅ | — | — | — | — |
 | Ollama (Local Models) | ✅ | ✅ | — | — | — | ✅ |
 | Any OpenAI-compatible endpoint | ✅ | ✅ | — | — | — | — |
 
-## New Features (v2.0)
+## Features (v2.0)
 
-### 1. Local AI (Ollama)
-The plugin now automatically connects to your local Ollama server.
-- **Auto-Discovery:** Models are automatically fetched from your server (default `http://192.168.3.214:11434`) and populated in the selection list.
+### OAuth Login (Anthropic Claude)
+Login to Anthropic Claude directly from the plugin without API keys.
+- **Browser-based auth:** Click "Login" in the chat header, authorize in your browser, and you're in.
+- **OAuth 2.0 PKCE:** Secure flow with local callback server — no API key needed.
+- **Token persistence:** Tokens are saved (obfuscated) and auto-refreshed on expiry.
+- **Fallback:** If an API key is configured, it takes priority. OAuth is used when no key is set.
+
+### Local AI (Ollama)
+The plugin automatically connects to your local Ollama server.
+- **Auto-Discovery:** Models are automatically fetched from your server and appear in the selection list.
 - **Streaming Support:** Local models run with real-time streaming just like cloud providers.
 
-### 2. Skills System
+### Skills System
 Create AI "experts" with custom system prompts.
-- **Keywords Triggers:** The plugin automatically injects expert instructions if your message contains specific keywords (e.g., "blueprint", "cpp", "logic").
-- **Expert Context:** Use predefined skills like "Blueprint Expert" to ensure the AI follows specific UE5 standards.
+- **Keyword Triggers:** The plugin automatically injects expert instructions if your message contains specific keywords (e.g., "blueprint", "c++", "ui").
+- **Expert Context:** Use predefined skills like "Blueprint Expert" or "C++ Pro" to ensure the AI follows UE5 standards.
 
-### 3. Smart Routing
+### Smart Routing
 The plugin intelligently delegates tasks to specific models.
-- **Auto-Switching:** If you ask a technical question, the chat can automatically switch to a coding-specialized model (like DeepSeek or a local LLM).
-- **Customizable:** Define your preferred coding and thinking models in the Project Settings.
+- **Auto-Switching:** If you ask a coding question, the chat can automatically switch to a coding-specialized model.
+- **Customizable:** Define your preferred coding provider and model in Project Settings.
+
+### Editor Integration
+The AI can manipulate the Unreal Editor directly.
+- **Create assets:** Blueprints, Data Assets via `CreateEditorAsset`.
+- **Inject Blueprint logic:** Parse T3D text and inject nodes into Blueprint graphs.
+- **Add components:** Dynamically add components to Blueprints.
+- **Blueprint analysis:** Export graph structure and compile with detailed error logs.
+- **Context awareness:** Automatically grabs selected assets and clipboard content as context for the AI.
+
+### Tool / Function Calling
+Full tool calling support across all major providers.
+- **OpenAI:** Tool calls parsed in both sync and streaming responses.
+- **Anthropic:** `tool_use` blocks parsed from responses, `input_json_delta` streaming.
+- **Google Gemini:** `functionCall` parts parsed from both sync and streaming.
+- **Unified types:** `FGenTool`, `FGenToolCall`, `FGenStreamDelta` with tool call fields.
 
 ## Installation
 
@@ -226,10 +68,10 @@ The plugin intelligently delegates tasks to specific models.
 
 ### Blueprint
 
-1. Open **Project Settings → Plugins → GenAI Plugin** and paste your API key.
+1. Open **Project Settings > Plugins > GenAI Plugin** and paste your API key (or click Login in the chat widget for Anthropic OAuth).
 2. Add a **Request OpenAI Chat Completion** node to your Blueprint.
-3. Connect **Make Gen Chat Message** (Role: User, Content: your prompt) → Messages array.
-4. Wire **OnComplete → Response → Content** to a Print String.
+3. Connect **Make Gen Chat Message** (Role: User, Content: your prompt) to the Messages array.
+4. Wire **OnComplete > Response > Content** to a Print String.
 
 ### C++
 
@@ -239,7 +81,6 @@ The plugin intelligently delegates tasks to specific models.
 TWeakObjectPtr<AMyActor> WeakThis(this);
 
 FGenOAIChatSettings Settings;
-// Settings.Model = EGenOAIModel::GPT_4o;  // default
 
 TArray<FGenChatMessage> Messages;
 FGenChatMessage& Msg = Messages.AddDefaulted_GetRef();
@@ -266,15 +107,71 @@ UGenOAIChatStream::SendStreamChatRequest(Messages, Settings,
         [WeakThis](const FGenStreamDelta& Delta, bool bSuccess)
         {
             if (!WeakThis.IsValid() || !bSuccess) return;
-            // Delta.ContentDelta      — new tokens this chunk
-            // Delta.ContentAccumulated — full text so far
-            // Delta.bIsDone           — true on last chunk
+            // Delta.ContentDelta           — new tokens this chunk
+            // Delta.ContentAccumulated     — full text so far
+            // Delta.bIsDone               — true on last chunk
+            // Delta.ToolCallFunctionName  — function name (streaming tool calls)
+            // Delta.ToolCallArgumentsDelta — argument fragment (streaming tool calls)
         }));
+```
+
+### Tool Calling
+
+```cpp
+#include "OpenAI/GenOAIChat.h"
+
+FGenOAIChatSettings Settings;
+
+// Define a tool
+FGenTool Tool;
+Tool.Type = TEXT("function");
+Tool.Function.Name = TEXT("get_weather");
+Tool.Function.Description = TEXT("Get the current weather for a location");
+Tool.Function.ParametersJsonSchema = TEXT(R"({"type":"object","properties":{"location":{"type":"string"}},"required":["location"]})");
+
+Settings.Tools.Add(Tool);
+Settings.ToolChoice = EGenToolChoice::Auto;
+
+UGenOAIChat::SendChatRequest(Messages, Settings,
+    FOnOAIChatCompleteNative::CreateLambda(
+        [](const FGenChatResponse& Response, bool bSuccess)
+        {
+            if (!bSuccess) return;
+            for (const FGenToolCall& TC : Response.ToolCalls)
+            {
+                UE_LOG(LogTemp, Log, TEXT("Tool: %s, Args: %s"),
+                    *TC.FunctionName, *TC.FunctionArguments);
+            }
+        }));
+```
+
+### OAuth Login (C++)
+
+```cpp
+#include "GenAIOAuth.h"
+
+// Login — opens browser
+FGenAIOAuth::Get().Login();
+
+// Check status
+if (FGenAIOAuth::Get().IsLoggedIn())
+{
+    // Anthropic requests will automatically use the OAuth token
+}
+
+// Logout
+FGenAIOAuth::Get().Logout();
+
+// Listen for status changes
+FGenAIOAuth::Get().OnLoginStatusChanged.AddLambda([](bool bLoggedIn)
+{
+    UE_LOG(LogTemp, Log, TEXT("OAuth: %s"), bLoggedIn ? TEXT("Logged in") : TEXT("Logged out"));
+});
 ```
 
 ## Chat Widget
 
-A ready-to-use in-game / in-editor chat panel that looks and feels like a modern AI chat UI.
+A ready-to-use in-game / in-editor chat panel that looks and feels like a modern AI chat.
 
 **Open from Blueprint:**
 ```
@@ -288,44 +185,54 @@ UGenAIChatWidget::OpenGenAIChat(WorldContextObject);
 ```
 
 Features:
-- **16 models** grouped by provider in a dropdown (OpenAI, Anthropic, Google, DeepSeek, Mistral)
-- **Streaming** responses with a live `▌` cursor for OpenAI, Anthropic, and Google
+- **14+ models** grouped by provider in a dropdown (OpenAI, Anthropic, Google, DeepSeek, Mistral) plus dynamic Ollama models
+- **Login / Logout button** in the header for OAuth-based Anthropic auth
+- **Streaming** responses with a live `|` cursor for OpenAI, Anthropic, Google, and Ollama
+- **Session management** — multiple chat sessions, create new, switch between, persistent history
 - **Blueprint attachment** — select a Blueprint asset in the Content Browser and click the clip icon to attach its properties, functions, and components as context (editor builds only)
+- **Custom model IDs** — select "Custom" for any provider and type any model ID
+- **Language selector** — switch between Ukrainian and English response language
+- **Editor tool execution** — AI can create assets, inject Blueprint nodes, and add components directly
 - **Enter to send**, close button, full-screen dark overlay
 - Pure Slate (`SGenAIChatWidget`) wrapped in a `UWidget` (`UGenAIChatWidget`) for use in Widget Blueprints
 
-## Features
-
-- **Chat completions** — all major providers, with vision (multimodal) support
-- **Real-time streaming** — SSE-based token streaming for OpenAI, Anthropic, Google
-- **In-game chat widget** — full UI panel with model selector and Blueprint attachment
-- **Tool / Function calling** — structured `FGenTool` array, works in Blueprint and C++
-- **Structured output** — JSON Schema enforcement (`bStructuredOutput` in settings)
-- **Text-to-Speech** — OpenAI TTS (tts-1, tts-1-hd, gpt-4o-mini-tts) + Google Cloud TTS
-- **Audio transcription** — OpenAI Whisper, multipart upload
-- **Image generation & editing** — DALL-E 2/3, gpt-image-1
-- **Models listing** — fetch available models at runtime
-- **Secure API key storage** — XOR + Base64 obfuscation, non-plaintext in config
-- **Proxy support** — route all requests through a custom URL
-- **OpenAI-compatible mode** — point at any compatible endpoint (Groq, Together, Ollama, etc.)
-
 ## Settings
 
-All settings live in **Project Settings → Plugins → GenAI Plugin** (`UGenAISettings`).
+All settings live in **Project Settings > Plugins > GenAI Plugin** (`UGenAISettings`).
 
 | Field | Description |
 |-------|-------------|
+| **API Keys** | |
 | OpenAI API Key | `sk-...` key from platform.openai.com |
-| Anthropic API Key | Key from console.anthropic.com |
+| Anthropic API Key | Key from console.anthropic.com (or use OAuth Login) |
 | Google AI API Key | Key from aistudio.google.com |
-| DeepSeek / Mistral API Key | Provider-specific keys |
-| OpenAI Base URL Override | Custom endpoint, e.g. for Groq or Ollama |
-| Proxy URL | Route all traffic through a proxy server |
+| DeepSeek API Key | Key from DeepSeek |
+| Mistral API Key | Key from Mistral |
+| **Endpoints** | |
+| OpenAI Base URL Override | Custom endpoint for OpenAI-compatible APIs (Groq, Together, etc.) |
+| Ollama Base URL | Local Ollama server URL (default: `http://localhost:11434`) |
+| Anthropic API Version | Anthropic API version header (default: `2023-06-01`) |
+| **Proxy** | |
+| Proxy URL | Route all API traffic through a proxy server |
+| Proxy Auth Header | Authentication header for the proxy |
+| **Model Management** | |
+| Enabled Models | Enable/disable specific models in the chat dropdown |
+| Default Chat Model | Model ID used for general chat |
+| Default Code Model | Model ID used when a Blueprint is attached as context |
+| **Model Parameters** | |
+| Temperature | Response creativity (0.0 = deterministic, 2.0 = creative) |
+| Max Tokens | Maximum response tokens per request |
+| Max Conversation History | How many previous messages to keep in context |
+| **Other** | |
+| Preferred Language | Ukrainian or English |
+| Installed Skills | List of expert skills with keywords and system prompts |
+| Smart Routing | Auto-routing config: coding keywords, provider, model |
 | Enable Extended Logging | Log request/response bodies (base64 truncated) |
 
 You can also set keys at runtime:
 ```cpp
 GetMutableDefault<UGenAISettings>()->SetOpenAIKey(TEXT("sk-..."));
+GetMutableDefault<UGenAISettings>()->SetAnthropicKey(TEXT("sk-..."));
 ```
 
 ## Architecture
@@ -333,25 +240,36 @@ GetMutableDefault<UGenAISettings>()->SetOpenAIKey(TEXT("sk-..."));
 ```
 Source/UU_GenAI/
 ├── Public/
-│   ├── GenAITypes.h          # All structs & enums
-│   ├── GenAISettings.h       # UDeveloperSettings
-│   ├── GenAIUtils.h          # Internal JSON/HTTP helpers
+│   ├── GenAITypes.h          # All structs, enums, delegates
+│   ├── GenAISettings.h       # UDeveloperSettings (Project Settings UI)
+│   ├── GenAIUtils.h          # Internal JSON builders, parsers, key resolution
+│   ├── GenAIOAuth.h          # OAuth 2.0 PKCE login manager
+│   ├── GenAISubsystem.h      # Engine subsystem: history, tool execution, context
+│   ├── GenAIEditorBridge.h   # Editor subsystem: asset creation, graph manipulation
+│   ├── UU_GenAIModule.h      # Module startup/shutdown
 │   ├── OpenAI/               # GenOAIChat, GenOAIChatStream, GenOAITTS,
 │   │                         #   GenOAITranscription, GenOAIImageGen, GenOAIModels
 │   ├── Anthropic/            # GenAnthropicChat, GenAnthropicChatStream
 │   ├── Google/               # GenGoogleChat, GenGoogleTTS
+│   ├── Ollama/               # GenOllamaChatStream
 │   ├── Compat/               # GenCompatChat (DeepSeek, Mistral, generic)
 │   └── UI/                   # GenAIChatWidget (Slate + UMG chat panel)
-└── Private/                  # Implementations
+└── Private/                  # Implementations (mirrors Public/ structure)
 ```
 
 Each provider follows the same pattern:
 - **Blueprint node** — `UCancellableAsyncAction` subclass, `Request<Provider><Feature>`
 - **C++ static class** — `Send<Feature>Request(...)` + native delegate
 
+### Authentication Priority (Anthropic)
+
+1. `ApiKeyOverride` on the per-request settings struct (highest)
+2. API key from Project Settings
+3. OAuth Bearer token via `FGenAIOAuth` (if logged in and no key set)
+
 ## Engine Version
 
-Tested on **Unreal Engine 5.6**. Should work on UE 5.3+.
+Tested on **Unreal Engine 5.5+**. Should work on UE 5.3+.
 
 ## License
 
