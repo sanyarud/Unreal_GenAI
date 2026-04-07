@@ -77,6 +77,8 @@ private:
     FReply OnAttachClicked();
     FReply OnClearAttachment();
     FReply OnCloseClicked();
+    FReply OnLoginClicked();
+    void UpdateLoginButton();
 
     // ─── AI dispatch ──────────────────────────────────────────────────────────
     void SendToProvider(const TArray<FGenChatMessage>& Messages, int32 ModelIdx);
@@ -105,6 +107,7 @@ private:
     TSharedPtr<SMultiLineEditableText>  StreamingLabel_Editable;   // copyable live text
     TSharedPtr<SWidget>                 AttachBar;
     TSharedPtr<STextBlock>              AttachLabel;
+    TSharedPtr<STextBlock>              LoginBtnLabel;
     
     // ─── Session UI ───────────────────────────────────────────────────────────
     TSharedPtr<SVerticalBox>            SessionsVBox;

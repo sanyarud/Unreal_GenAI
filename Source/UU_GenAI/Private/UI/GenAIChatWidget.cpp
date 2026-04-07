@@ -3,6 +3,7 @@
 #include "UI/GenAIChatWidget.h"
 #include "GenAISubsystem.h"
 #include "GenAISettings.h"
+#include "GenAIOAuth.h"
 #include "Google/GenGoogleChat.h"
 #include "Widgets/Text/SMultiLineEditableText.h"
 #include "Anthropic/GenAnthropicChat.h"
@@ -383,6 +384,11 @@ TSharedRef<SWidget> SGenAIChatWidget::BuildHeader() {
   const FSlateFontInfo FontSmall =
       FCoreStyle::GetDefaultFontStyle("Regular", 10);
 
+  // Subscribe to OAuth status changes to update button text
+  FGenAIOAuth::Get().OnLoginStatusChanged.AddLambda([this](bool /*bLoggedIn*/) {
+      UpdateLoginButton();
+  });
+
   return SNew(SBorder)
       .BorderImage(&HeaderBrush)
       .Padding(FMargin(14.f, 10.f))
@@ -395,7 +401,6 @@ TSharedRef<SWidget> SGenAIChatWidget::BuildHeader() {
                                     .ColorAndOpacity(ChatPalette::Text)]
            // Spacer
            + SHorizontalBox::Slot().FillWidth(1.f)
-           // Custom model input (if needed here, but usually hide it in header)
            // Custom model input
            + SHorizontalBox::Slot()
                  .AutoWidth()
@@ -415,6 +420,28 @@ TSharedRef<SWidget> SGenAIChatWidget::BuildHeader() {
                                      return EVisibility::Visible;
                                    return EVisibility::Collapsed;
                                  })]
+           // Login / Logout button
+           + SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center).Padding(0, 0, 8, 0)
+                 [SNew(SButton)
+                      .ButtonStyle(FAppStyle::Get(), "SimpleButton")
+                      .OnClicked(this, &SGenAIChatWidget::OnLoginClicked)
+                      .ContentPadding(FMargin(8.f, 4.f))
+                      .ToolTipText_Lambda([]() {
+                          return FGenAIOAuth::Get().IsLoggedIn()
+                              ? FText::FromString(TEXT("Logged in to Claude. Click to logout."))
+                              : FText::FromString(TEXT("Login to Claude via browser"));
+                      })
+                      [
+                          SAssignNew(LoginBtnLabel, STextBlock)
+                              .Text(FText::FromString(
+                                  FGenAIOAuth::Get().IsLoggedIn() ? TEXT("Logout") : TEXT("Login")))
+                              .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
+                              .ColorAndOpacity_Lambda([]() {
+                                  return FGenAIOAuth::Get().IsLoggedIn()
+                                      ? FSlateColor(ChatPalette::Accent)
+                                      : FSlateColor(ChatPalette::Text);
+                              })
+                      ]]
            // Close button
            + SHorizontalBox::Slot().AutoWidth().VAlign(VAlign_Center)
                  [SNew(SButton)
@@ -426,6 +453,26 @@ TSharedRef<SWidget> SGenAIChatWidget::BuildHeader() {
                                .Font(FCoreStyle::GetDefaultFontStyle("Regular",
                                                                      12))
                                .ColorAndOpacity(ChatPalette::Subtext)]]];
+}
+
+FReply SGenAIChatWidget::OnLoginClicked() {
+    if (FGenAIOAuth::Get().IsLoggedIn())
+    {
+        FGenAIOAuth::Get().Logout();
+    }
+    else
+    {
+        FGenAIOAuth::Get().Login();
+    }
+    return FReply::Handled();
+}
+
+void SGenAIChatWidget::UpdateLoginButton() {
+    if (LoginBtnLabel.IsValid())
+    {
+        LoginBtnLabel->SetText(FText::FromString(
+            FGenAIOAuth::Get().IsLoggedIn() ? TEXT("Logout") : TEXT("Login")));
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

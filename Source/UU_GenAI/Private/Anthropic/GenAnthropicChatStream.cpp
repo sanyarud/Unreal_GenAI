@@ -3,6 +3,7 @@
 #include "Anthropic/GenAnthropicChatStream.h"
 #include "GenAISettings.h"
 #include "GenAIUtils.h"
+#include "GenAIOAuth.h"
 #include "HttpModule.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Dom/JsonObject.h"
@@ -122,10 +123,13 @@ TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> UGenAnthropicChatStream::SendStrea
     const FGenAnthropicChatSettings& Settings,
     FOnAnthropicStreamDeltaNative OnDelta)
 {
-    const FString ApiKey = FGenAIUtils::GetAnthropicKey(Settings.ApiKeyOverride);
-    if (ApiKey.IsEmpty())
+    // Try OAuth token first, fall back to API key
+    FString ApiKey = FGenAIUtils::GetAnthropicKey(Settings.ApiKeyOverride);
+    const bool bUseOAuth = ApiKey.IsEmpty() && FGenAIOAuth::Get().IsLoggedIn();
+
+    if (ApiKey.IsEmpty() && !bUseOAuth)
     {
-        UE_LOG(LogTemp, Error, TEXT("[GenAI][Anthropic Stream] API key not set."));
+        UE_LOG(LogTemp, Error, TEXT("[GenAI][Anthropic Stream] API key not set and not logged in via OAuth."));
         OnDelta.ExecuteIfBound(FGenStreamDelta(), false);
         return nullptr;
     }
@@ -142,7 +146,16 @@ TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> UGenAnthropicChatStream::SendStrea
     Request->SetURL(Endpoint);
     Request->SetVerb(TEXT("POST"));
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
-    Request->SetHeader(TEXT("x-api-key"), ApiKey);
+
+    if (bUseOAuth)
+    {
+        Request->SetHeader(TEXT("Authorization"), TEXT("Bearer ") + FGenAIOAuth::Get().GetAccessToken());
+    }
+    else
+    {
+        Request->SetHeader(TEXT("x-api-key"), ApiKey);
+    }
+
     Request->SetHeader(TEXT("anthropic-version"), ApiVersion);
     Request->SetContentAsString(Body);
 

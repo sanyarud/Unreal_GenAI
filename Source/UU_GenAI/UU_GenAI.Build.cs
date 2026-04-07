@@ -22,6 +22,8 @@ public class UU_GenAI : ModuleRules
             "InputCore",
             "ApplicationCore",
             "UMG",
+            "Sockets",
+            "Networking",
         });
 
         PrivateDependencyModuleNames.AddRange(new string[]
