@@ -637,8 +637,30 @@ FGenChatResponse FGenAIUtils::ParseAnthropicChatResponse(const FString& JsonStri
                 (*BlockObj)->TryGetStringField(TEXT("text"), Text);
                 Response.Content += Text;
             }
+            else if (BlockType == TEXT("tool_use"))
+            {
+                FGenToolCall TC;
+                (*BlockObj)->TryGetStringField(TEXT("id"), TC.Id);
+                TC.Type = TEXT("function");
+                (*BlockObj)->TryGetStringField(TEXT("name"), TC.FunctionName);
+                const TSharedPtr<FJsonObject>* InputObj;
+                if ((*BlockObj)->TryGetObjectField(TEXT("input"), InputObj))
+                {
+                    TC.FunctionArguments = JsonObjectToString(*InputObj);
+                }
+                Response.ToolCalls.Add(TC);
+            }
         }
     }
+
+    const TSharedPtr<FJsonObject>* UsageObj;
+    if (Root->TryGetObjectField(TEXT("usage"), UsageObj))
+    {
+        (*UsageObj)->TryGetNumberField(TEXT("input_tokens"), Response.PromptTokens);
+        (*UsageObj)->TryGetNumberField(TEXT("output_tokens"), Response.CompletionTokens);
+        Response.TotalTokens = Response.PromptTokens + Response.CompletionTokens;
+    }
+
     return Response;
 }
 
@@ -668,9 +690,30 @@ FGenChatResponse FGenAIUtils::ParseGoogleChatResponse(const FString& JsonString)
             for (const TSharedPtr<FJsonValue>& Part : *Parts)
             {
                 const TSharedPtr<FJsonObject>* PartObj;
+                if (!Part->TryGetObject(PartObj)) continue;
+
                 FString Text;
-                if (Part->TryGetObject(PartObj) && (*PartObj)->TryGetStringField(TEXT("text"), Text))
+                if ((*PartObj)->TryGetStringField(TEXT("text"), Text))
+                {
                     Response.Content += Text;
+                }
+
+                // Parse functionCall parts for Gemini tool use
+                const TSharedPtr<FJsonObject>* FuncCallObj;
+                if ((*PartObj)->TryGetObjectField(TEXT("functionCall"), FuncCallObj))
+                {
+                    FGenToolCall TC;
+                    TC.Id = FGuid::NewGuid().ToString();
+                    TC.Type = TEXT("function");
+                    (*FuncCallObj)->TryGetStringField(TEXT("name"), TC.FunctionName);
+                    const TSharedPtr<FJsonObject>* ArgsObj;
+                    if ((*FuncCallObj)->TryGetObjectField(TEXT("args"), ArgsObj))
+                    {
+                        TC.FunctionArguments = JsonObjectToString(*ArgsObj);
+                    }
+                    Response.ToolCalls.Add(TC);
+                    Response.FinishReason = EGenFinishReason::ToolCalls;
+                }
             }
         }
     }
@@ -696,6 +739,23 @@ bool FGenAIUtils::ParseOAIStreamChunk(const FString& Line, FGenStreamDelta& OutD
     if ((*Choice)->TryGetObjectField(TEXT("delta"), DeltaObj))
     {
         (*DeltaObj)->TryGetStringField(TEXT("content"), OutDelta.ContentDelta);
+
+        // Parse streaming tool calls
+        const TArray<TSharedPtr<FJsonValue>>* ToolCallsArr;
+        if ((*DeltaObj)->TryGetArrayField(TEXT("tool_calls"), ToolCallsArr) && ToolCallsArr->Num() > 0)
+        {
+            const TSharedPtr<FJsonObject>* TCObj;
+            if ((*ToolCallsArr)[0]->TryGetObject(TCObj))
+            {
+                (*TCObj)->TryGetStringField(TEXT("id"), OutDelta.ToolCallId);
+                const TSharedPtr<FJsonObject>* FuncObj;
+                if ((*TCObj)->TryGetObjectField(TEXT("function"), FuncObj))
+                {
+                    (*FuncObj)->TryGetStringField(TEXT("name"), OutDelta.ToolCallFunctionName);
+                    (*FuncObj)->TryGetStringField(TEXT("arguments"), OutDelta.ToolCallArgumentsDelta);
+                }
+            }
+        }
     }
     FString FinishStr;
     if ((*Choice)->TryGetStringField(TEXT("finish_reason"), FinishStr) && !FinishStr.IsEmpty())
@@ -710,17 +770,67 @@ bool FGenAIUtils::ParseAnthropicStreamChunk(const FString& EventLine, const FStr
 {
     FString EventType = EventLine.Mid(7).TrimStartAndEnd();
     if (EventType == TEXT("message_stop")) { OutDelta.bIsDone = true; return true; }
-    if (EventType != TEXT("content_block_delta")) return false;
 
-    TSharedPtr<FJsonObject> Root = ParseJsonString(DataLine.Mid(6));
-    if (!Root.IsValid()) return false;
+    FString DataStr = DataLine.StartsWith(TEXT("data: ")) ? DataLine.Mid(6) : DataLine;
+    TSharedPtr<FJsonObject> Root = ParseJsonString(DataStr);
 
-    const TSharedPtr<FJsonObject>* DeltaObj;
-    if (Root->TryGetObjectField(TEXT("delta"), DeltaObj))
+    // content_block_start: captures tool_use id and name
+    if (EventType == TEXT("content_block_start"))
     {
-        (*DeltaObj)->TryGetStringField(TEXT("text"), OutDelta.ContentDelta);
+        if (!Root.IsValid()) return false;
+        const TSharedPtr<FJsonObject>* BlockObj;
+        if (Root->TryGetObjectField(TEXT("content_block"), BlockObj))
+        {
+            FString BlockType;
+            (*BlockObj)->TryGetStringField(TEXT("type"), BlockType);
+            if (BlockType == TEXT("tool_use"))
+            {
+                (*BlockObj)->TryGetStringField(TEXT("id"), OutDelta.ToolCallId);
+                (*BlockObj)->TryGetStringField(TEXT("name"), OutDelta.ToolCallFunctionName);
+                return true;
+            }
+        }
+        return false;
     }
-    return true;
+
+    // content_block_delta: text or tool input JSON fragments
+    if (EventType == TEXT("content_block_delta"))
+    {
+        if (!Root.IsValid()) return false;
+        const TSharedPtr<FJsonObject>* DeltaObj;
+        if (Root->TryGetObjectField(TEXT("delta"), DeltaObj))
+        {
+            FString DeltaType;
+            (*DeltaObj)->TryGetStringField(TEXT("type"), DeltaType);
+            if (DeltaType == TEXT("text_delta"))
+            {
+                (*DeltaObj)->TryGetStringField(TEXT("text"), OutDelta.ContentDelta);
+            }
+            else if (DeltaType == TEXT("input_json_delta"))
+            {
+                (*DeltaObj)->TryGetStringField(TEXT("partial_json"), OutDelta.ToolCallArgumentsDelta);
+            }
+        }
+        return true;
+    }
+
+    // message_delta: captures stop_reason (e.g. "tool_use" or "end_turn")
+    if (EventType == TEXT("message_delta"))
+    {
+        if (!Root.IsValid()) return false;
+        const TSharedPtr<FJsonObject>* DeltaObj;
+        if (Root->TryGetObjectField(TEXT("delta"), DeltaObj))
+        {
+            FString StopReason;
+            if ((*DeltaObj)->TryGetStringField(TEXT("stop_reason"), StopReason))
+            {
+                OutDelta.FinishReason = ParseFinishReason(StopReason);
+            }
+        }
+        return true;
+    }
+
+    return false;
 }
 
 bool FGenAIUtils::ParseGoogleStreamChunk(const FString& DataLine, FGenStreamDelta& OutDelta)
@@ -743,9 +853,24 @@ bool FGenAIUtils::ParseGoogleStreamChunk(const FString& DataLine, FGenStreamDelt
                     for (const TSharedPtr<FJsonValue>& P : *Parts)
                     {
                         const TSharedPtr<FJsonObject>* PObj;
+                        if (!P->TryGetObject(PObj)) continue;
+
                         FString T;
-                        if (P->TryGetObject(PObj) && (*PObj)->TryGetStringField(TEXT("text"), T))
+                        if ((*PObj)->TryGetStringField(TEXT("text"), T))
                             OutDelta.ContentDelta += T;
+
+                        // Parse functionCall parts for Gemini tool use
+                        const TSharedPtr<FJsonObject>* FuncCallObj;
+                        if ((*PObj)->TryGetObjectField(TEXT("functionCall"), FuncCallObj))
+                        {
+                            (*FuncCallObj)->TryGetStringField(TEXT("name"), OutDelta.ToolCallFunctionName);
+                            const TSharedPtr<FJsonObject>* ArgsObj;
+                            if ((*FuncCallObj)->TryGetObjectField(TEXT("args"), ArgsObj))
+                            {
+                                OutDelta.ToolCallArgumentsDelta = JsonObjectToString(*ArgsObj);
+                            }
+                            OutDelta.FinishReason = EGenFinishReason::ToolCalls;
+                        }
                     }
                 }
             }
