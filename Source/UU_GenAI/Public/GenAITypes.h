@@ -329,10 +329,10 @@ struct FGenAIChatSession
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
-    FString SessionId;
+    FString SessionId = TEXT("");
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
-    FString Title;
+    FString Title = TEXT("New Chat");
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
     TArray<FGenChatMessage> History;
@@ -340,11 +340,11 @@ struct FGenAIChatSession
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
     FDateTime LastUpdated;
 
-    FGenAIChatSession() 
-    { 
-        SessionId = FGuid::NewGuid().ToString(); 
-        LastUpdated = FDateTime::Now(); 
-        Title = TEXT("New Chat"); 
+    FGenAIChatSession()
+    {
+        SessionId = FGuid::NewGuid().ToString();
+        LastUpdated = FDateTime::Now();
+        Title = TEXT("New Chat");
     }
 };
 
