@@ -18,6 +18,7 @@
 #include "IPAddress.h"
 #include "Misc/SecureHash.h"
 #include "HAL/PlatformProcess.h"
+#include "GenericPlatform/GenericPlatformHttp.h"
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  OAuth endpoint defaults
@@ -178,7 +179,7 @@ void FGenAIOAuth::Login()
     FString Url = FString::Printf(
         TEXT("%s?response_type=code&client_id=%s&redirect_uri=%s&code_challenge=%s&code_challenge_method=S256&scope=user:read"),
         *AuthorizeUrl, *ClientId,
-        *FPlatformHttp::UrlEncode(RedirectUri),
+        *FGenericPlatformHttp::UrlEncode(RedirectUri),
         *CodeChallenge);
 
     UE_LOG(LogTemp, Log, TEXT("[GenAI][OAuth] Opening browser for login..."));
