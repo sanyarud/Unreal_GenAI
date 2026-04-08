@@ -339,13 +339,6 @@ struct FGenAIChatSession
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GenAI|Chat")
     FDateTime LastUpdated;
-
-    FGenAIChatSession()
-    {
-        SessionId = FGuid::NewGuid().ToString();
-        LastUpdated = FDateTime::Now();
-        Title = TEXT("New Chat");
-    }
 };
 
 // ─────────────────────────────────────────────

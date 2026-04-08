@@ -26,6 +26,8 @@ void UGenAISubsystem::Initialize(FSubsystemCollectionBase& Collection)
     if (Sessions.Num() == 0)
     {
         FGenAIChatSession NewSession;
+        NewSession.SessionId = FGuid::NewGuid().ToString();
+        NewSession.LastUpdated = FDateTime::Now();
         NewSession.Title = TEXT("Initial Chat");
         Sessions.Add(NewSession);
         CurrentSessionId = NewSession.SessionId;

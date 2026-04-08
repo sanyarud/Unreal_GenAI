@@ -368,6 +368,8 @@ void SGenAIChatWidget::CreateNewSession()
     if (!Sub) return;
 
     FGenAIChatSession NewSession;
+    NewSession.SessionId = FGuid::NewGuid().ToString();
+    NewSession.LastUpdated = FDateTime::Now();
     Sub->Sessions.Add(NewSession);
     Sub->CurrentSessionId = NewSession.SessionId;
     
