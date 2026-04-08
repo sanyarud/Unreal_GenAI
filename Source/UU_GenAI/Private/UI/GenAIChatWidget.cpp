@@ -77,9 +77,11 @@ void SGenAIChatWidget::RefreshOllamaModels() {
   auto Request = FHttpModule::Get().CreateRequest();
   Request->SetURL(Url);
   Request->SetVerb(TEXT("GET"));
+  TWeakPtr<SGenAIChatWidget> WeakSelf = StaticCastSharedRef<SGenAIChatWidget>(AsShared());
   Request->OnProcessRequestComplete().BindLambda(
-      [this](FHttpRequestPtr Req, FHttpResponsePtr Res, bool bSuccess) {
-        if (!bSuccess || !Res.IsValid())
+      [WeakSelf](FHttpRequestPtr Req, FHttpResponsePtr Res, bool bSuccess) {
+        TSharedPtr<SGenAIChatWidget> Self = WeakSelf.Pin();
+        if (!Self.IsValid() || !bSuccess || !Res.IsValid())
           return;
 
         TSharedPtr<FJsonObject> JsonObj;
@@ -89,18 +91,18 @@ void SGenAIChatWidget::RefreshOllamaModels() {
           if (JsonObj->TryGetArrayField(TEXT("models"), ModelList)) {
             // Find where Ollama starts in our list
             int32 InsertIdx = -1;
-            for (int32 i = 0; i < Models.Num(); ++i) {
-              if (Models[i].Group == TEXT("Ollama") &&
-                  Models[i].ModelId != TEXT("sep")) {
+            for (int32 i = 0; i < Self->Models.Num(); ++i) {
+              if (Self->Models[i].Group == TEXT("Ollama") &&
+                  Self->Models[i].ModelId != TEXT("sep")) {
                 if (InsertIdx == -1)
                   InsertIdx = i;
-                Models.RemoveAt(i);
+                Self->Models.RemoveAt(i);
                 i--;
               }
             }
 
             if (InsertIdx == -1)
-              InsertIdx = Models.Num();
+              InsertIdx = Self->Models.Num();
 
             for (auto &ModelVal : *ModelList) {
               auto Obj = ModelVal->AsObject();
@@ -111,24 +113,24 @@ void SGenAIChatWidget::RefreshOllamaModels() {
                 Entry.Group = TEXT("Ollama");
                 Entry.Provider = TEXT("ollama");
                 Entry.ModelId = ModelName;
-                Models.Insert(Entry, InsertIdx++);
+                Self->Models.Insert(Entry, InsertIdx++);
               }
             }
 
             // Rebuild combo items
-            ComboItems.Empty();
+            Self->ComboItems.Empty();
             FString LastGroup;
-            for (int32 i = 0; i < Models.Num(); ++i) {
-              if (Models[i].Group != LastGroup) {
-                ComboItems.Add(MakeShared<FString>(
-                    TEXT("── ") + Models[i].Group + TEXT(" ──")));
-                LastGroup = Models[i].Group;
+            for (int32 i = 0; i < Self->Models.Num(); ++i) {
+              if (Self->Models[i].Group != LastGroup) {
+                Self->ComboItems.Add(MakeShared<FString>(
+                    TEXT("── ") + Self->Models[i].Group + TEXT(" ──")));
+                LastGroup = Self->Models[i].Group;
               }
-              ComboItems.Add(MakeShared<FString>(Models[i].Display));
+              Self->ComboItems.Add(MakeShared<FString>(Self->Models[i].Display));
             }
 
-            if (ModelCombo.IsValid()) {
-              ModelCombo->RefreshOptions();
+            if (Self->ModelCombo.IsValid()) {
+              Self->ModelCombo->RefreshOptions();
             }
           }
         }
@@ -1218,6 +1220,18 @@ TSharedPtr<SWidget> UGenAIChatWidget::s_OverlaySlot;
 TWeakPtr<SGenAIChatWidget> UGenAIChatWidget::s_ChatWidget;
 
 TSharedRef<SWidget> UGenAIChatWidget::RebuildWidget() {
+#if WITH_EDITOR
+  if (IsDesignTime())
+  {
+    return SNew(SBox)
+      .HAlign(HAlign_Center)
+      .VAlign(VAlign_Center)
+      [
+        SNew(STextBlock)
+          .Text(FText::FromString(TEXT("[GenAI Chat Widget]")))
+      ];
+  }
+#endif
   TSharedRef<SGenAIChatWidget> W = SNew(SGenAIChatWidget);
   SlateWidget = W;
   return W;
